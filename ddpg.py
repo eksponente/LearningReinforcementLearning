@@ -108,7 +108,7 @@ class Actor(object):
 
         self.q_grads = tf.placeholder(tf.float32, (None, self.action_shape[0]))
         self.params = tf.trainable_variables(scope="actor")
-        self.pi_grads = tf.gradients(self.output, self.params, self.q_grads)
+        self.pi_grads = tf.gradients(self.output, self.params, -self.q_grads)
         clipped_grads = [tf.clip_by_value(grad, -1.0, 1.0) for grad in self.pi_grads]
         self.optimize = tf.train.AdamOptimizer(actor_lr).apply_gradients(zip(clipped_grads, self.params))
 
